@@ -54,7 +54,11 @@
 
 - (void)setCurrentPageIndex:(NSUInteger)index animated:(BOOL)animated;
 
+- (void)setCurrentPageIndex:(NSInteger)index reloadData:(BOOL)reloadData;
+
 - (void)reloadData;
+
+- (BOOL)isDragging;
 
 @end
 

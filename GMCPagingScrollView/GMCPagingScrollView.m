@@ -134,7 +134,7 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
         NSUInteger numberOfActualPages = numberOfPages + [self numberOfInfiniteScrollPages];
         
 		self.scrollView.frame = frameForScrollView;
-		self.scrollView.contentSize = CGSizeMake(frameForScrollView.size.width * numberOfActualPages, frameForScrollView.size.height);
+        self.scrollView.contentSize = CGSizeMake(frameForScrollView.size.width * numberOfActualPages, frameForScrollView.size.height);
         self.scrollView.contentOffset = CGPointMake(frameForScrollView.size.width * currentPageIndex, 0);
 		
 		for (UIView *page in self.visiblePageSet) {
@@ -258,11 +258,13 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
     }
     
     NSMutableSet *reusablePages = [NSMutableSet set];
-    for (GMCPagingScrollViewReusableView *page in self.visiblePageSet) {
+    for (UIView *page in self.visiblePageSet) {
         if (numberOfPages == 0 || ![neededPageIndexes containsObject:@([self indexOfPage:page])]) {
-            NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:page.reuseIdentifier];
+            if ([page respondsToSelector:@selector(reuseIdentifier)]) {
+                NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:((GMCPagingScrollViewReusableView *)page).reuseIdentifier];
+                [reusablePageSet addObject:page];
+            }
             
-            [reusablePageSet addObject:page];
             [reusablePages addObject:page];
             [page removeFromSuperview];
             
@@ -292,6 +294,33 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
     }
 }
 
+- (void)reloadDataWithCurrentPageIndex:(NSInteger)currentPageIndex {
+    for (UIView *page in self.visiblePageSet) {
+        [page removeFromSuperview];
+        
+        if ([self.delegate respondsToSelector:@selector(pagingScrollView:didEndDisplayingPage:atIndex:)]) {
+            [self.delegate pagingScrollView:self didEndDisplayingPage:page atIndex:page.tag];
+        }
+    }
+    [self.visiblePageSet removeAllObjects];
+    [self.reusablePageSetByReuseIdentifier removeAllObjects];
+    
+    CGRect frameForScrollView = [self frameForScrollView];
+    self.inLayoutSubviews = YES;
+    self.scrollView.contentSize = CGSizeMake(frameForScrollView.size.width * [self.dataSource numberOfPagesInPagingScrollView:self],
+                                             frameForScrollView.size.height);
+    self.inLayoutSubviews = NO;
+    
+    // Unset the delegate temporarily so that the current page index can be updated without triggering any page loading
+    id<UIScrollViewDelegate> previousDelegate = self.scrollView.delegate;
+    self.scrollView.delegate = nil;
+    [self setCurrentPageIndex:currentPageIndex animated:NO];
+    _currentPageIndex = currentPageIndex;
+    self.scrollView.delegate = previousDelegate;
+    
+    [self tilePages];
+}
+
 - (void)reloadData {
 	for (UIView *page in self.visiblePageSet) {
         [page removeFromSuperview];
@@ -318,6 +347,10 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
 		return self.scrollView;
 	}
 	return view;
+}
+
+- (BOOL)isDragging {
+    return self.scrollView.dragging;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -360,6 +393,14 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
 
 - (void)setCurrentPageIndex:(NSUInteger)index {
 	[self setCurrentPageIndex:index animated:NO];
+}
+
+- (void)setCurrentPageIndex:(NSInteger)currentPageIndex reloadData:(BOOL)reloadData {
+    if (reloadData) {
+        [self reloadDataWithCurrentPageIndex:currentPageIndex];
+    } else {
+        [self setCurrentPageIndex:currentPageIndex animated:NO];
+    }
 }
 
 - (CGPoint)contentOffset {
