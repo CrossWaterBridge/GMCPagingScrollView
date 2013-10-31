@@ -360,11 +360,11 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if ([self.delegate respondsToSelector:@selector(pagingScrollViewDidScroll:)]) {
-        [self.delegate pagingScrollViewDidScroll:self];
-    }
-    
     if (!self.inLayoutSubviews) {
+        if ([self.delegate respondsToSelector:@selector(pagingScrollViewDidScroll:)]) {
+            [self.delegate pagingScrollViewDidScroll:self];
+        }
+        
         NSUInteger numberOfPages = [self.dataSource numberOfPagesInPagingScrollView:self];
         NSUInteger numberOfActualPages = numberOfPages + [self numberOfInfiniteScrollPages];
         
