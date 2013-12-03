@@ -21,10 +21,11 @@
 // THE SOFTWARE.
 
 #import "GMCPagingScrollView.h"
+#import <objc/objc-runtime.h>
 
 static const CGFloat kDefaultInterpageSpacing = 40;
 
-#pragma mark - GMCPagingInternalScrollView
+
 
 typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
 
@@ -46,7 +47,29 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
 
 @end
 
-#pragma mark - GMCPagingScrollView
+
+
+@interface UIView (GMCPagingScrollView)
+
+@property (nonatomic, copy) NSString *reuseIdentifier;
+
+@end
+
+@implementation UIView (GMCPagingScrollView)
+
+static char reuseIdentifierKey;
+
+- (void)setReuseIdentifier:(NSString *)reuseIdentifier {
+    objc_setAssociatedObject(self, &reuseIdentifierKey, reuseIdentifier, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (NSString *)reuseIdentifier {
+    return objc_getAssociatedObject(self, &reuseIdentifierKey);
+}
+
+@end
+
+
 
 @interface GMCPagingScrollView () <UIScrollViewDelegate>
 
@@ -59,20 +82,6 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
 @property (nonatomic, assign) BOOL inLayoutSubviews;
 
 @end
-
-
-
-@interface GMCPagingScrollViewReusableView ()
-
-@property (nonatomic, strong) NSString *reuseIdentifier;
-
-@end
-
-@implementation GMCPagingScrollViewReusableView
-
-@end
-
-
 
 @implementation GMCPagingScrollView
 
@@ -181,7 +190,7 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
 - (id)dequeueReusablePageWithIdentifier:(NSString *)reuseIdentifier {
     NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:reuseIdentifier];
     
-    GMCPagingScrollViewReusableView *page = [reusablePageSet anyObject];
+    UIView *page = [reusablePageSet anyObject];
     if (page) {
         [reusablePageSet removeObject:page];
     } else {
@@ -261,7 +270,7 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
     for (UIView *page in self.visiblePageSet) {
         if (numberOfPages == 0 || ![neededPageIndexes containsObject:@([self indexOfPage:page])]) {
             if ([page respondsToSelector:@selector(reuseIdentifier)]) {
-                NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:((GMCPagingScrollViewReusableView *)page).reuseIdentifier];
+                NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:page.reuseIdentifier];
                 [reusablePageSet addObject:page];
             }
             
