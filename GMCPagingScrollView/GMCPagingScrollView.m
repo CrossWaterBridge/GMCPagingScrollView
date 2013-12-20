@@ -51,20 +51,30 @@ typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
 
 @interface UIView (GMCPagingScrollView)
 
-@property (nonatomic, copy) NSString *reuseIdentifier;
+@property (nonatomic, copy) NSString *pagingScrollViewReuseIdentifier;
+@property (nonatomic, assign) NSUInteger pagingScrollViewPageIndex;
 
 @end
 
 @implementation UIView (GMCPagingScrollView)
 
-static char reuseIdentifierKey;
+static char pagingScrollViewReuseIdentifierKey;
+static char pagingScrollViewPageIndexKey;
 
-- (void)setReuseIdentifier:(NSString *)reuseIdentifier {
-    objc_setAssociatedObject(self, &reuseIdentifierKey, reuseIdentifier, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setPagingScrollViewReuseIdentifier:(NSString *)pagingScrollViewReuseIdentifier {
+    objc_setAssociatedObject(self, &pagingScrollViewReuseIdentifierKey, pagingScrollViewReuseIdentifier, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (NSString *)reuseIdentifier {
-    return objc_getAssociatedObject(self, &reuseIdentifierKey);
+- (NSString *)pagingScrollViewReuseIdentifier {
+    return objc_getAssociatedObject(self, &pagingScrollViewReuseIdentifierKey);
+}
+
+- (void)setPagingScrollViewPageIndex:(NSUInteger)pagingScrollViewPageIndex {
+    objc_setAssociatedObject(self, &pagingScrollViewPageIndexKey, @(pagingScrollViewPageIndex), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSUInteger)pagingScrollViewPageIndex {
+    return [objc_getAssociatedObject(self, &pagingScrollViewPageIndexKey) unsignedIntegerValue];
 }
 
 @end
@@ -196,7 +206,7 @@ static char reuseIdentifierKey;
     } else {
         Class class = self.classByReuseIdentifier[reuseIdentifier];
         page = [[class alloc] initWithFrame:self.bounds];
-        page.reuseIdentifier = reuseIdentifier;
+        page.pagingScrollViewReuseIdentifier = reuseIdentifier;
     }
     return page;
 }
@@ -220,7 +230,8 @@ static char reuseIdentifierKey;
 }
 
 - (NSUInteger)indexOfPage:(UIView *)page {
-    return page.tag;
+    NSUInteger pageIndex = page.pagingScrollViewPageIndex;
+    return pageIndex;
 }
 
 - (NSArray *)visiblePages {
@@ -270,7 +281,7 @@ static char reuseIdentifierKey;
     for (UIView *page in self.visiblePageSet) {
         if (numberOfPages == 0 || ![neededPageIndexes containsObject:@([self indexOfPage:page])]) {
             if ([page respondsToSelector:@selector(reuseIdentifier)]) {
-                NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:page.reuseIdentifier];
+                NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:page.pagingScrollViewReuseIdentifier];
                 [reusablePageSet addObject:page];
             }
             
@@ -293,7 +304,7 @@ static char reuseIdentifierKey;
                 UIView *page = [self.dataSource pagingScrollView:self pageForIndex:index];
                 [self.scrollView addSubview:page];
                 [self.visiblePageSet addObject:page];
-                page.tag = index;
+                page.pagingScrollViewPageIndex = index;
                 page.frame = [self frameForPageAtActualIndex:actualPageIndex];
                 if ([self.delegate respondsToSelector:@selector(pagingScrollView:layoutPageAtIndex:)]) {
                     [self.delegate pagingScrollView:self layoutPageAtIndex:index];
@@ -308,7 +319,7 @@ static char reuseIdentifierKey;
         [page removeFromSuperview];
         
         if ([self.delegate respondsToSelector:@selector(pagingScrollView:didEndDisplayingPage:atIndex:)]) {
-            [self.delegate pagingScrollView:self didEndDisplayingPage:page atIndex:page.tag];
+            [self.delegate pagingScrollView:self didEndDisplayingPage:page atIndex:page.pagingScrollViewPageIndex];
         }
     }
     [self.visiblePageSet removeAllObjects];
