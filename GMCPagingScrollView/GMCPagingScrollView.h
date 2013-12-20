@@ -50,6 +50,11 @@
 
 - (void)reloadData;
 
+/**
+ * This is a quick-and-dirty version of UITableView's mutation methods.
+ */
+- (void)reloadNumberOfPages;
+
 - (BOOL)isDragging;
 
 @end

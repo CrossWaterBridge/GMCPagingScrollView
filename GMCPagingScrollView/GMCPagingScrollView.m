@@ -361,6 +361,16 @@ static char pagingScrollViewPageIndexKey;
 	[self tilePages];
 }
 
+- (void)reloadNumberOfPages {
+    NSUInteger numberOfPages = [self.dataSource numberOfPagesInPagingScrollView:self];
+    NSUInteger numberOfActualPages = numberOfPages + [self numberOfInfiniteScrollPages];
+	
+	CGRect frameForScrollView = [self frameForScrollView];
+	self.scrollView.contentSize = CGSizeMake(frameForScrollView.size.width * numberOfActualPages, frameForScrollView.size.height);
+	
+	[self tilePages];
+}
+
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     UIView *view = [super hitTest:point withEvent:event];
     if (view == self) {
