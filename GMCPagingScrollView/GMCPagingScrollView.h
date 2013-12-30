@@ -51,9 +51,9 @@
 - (void)reloadData;
 
 /**
- * This is a quick-and-dirty version of UITableView's mutation methods.
+ * This implementation assumes pages will only be inserted after the current index. It will need to be enhanced to support other use cases.
  */
-- (void)reloadNumberOfPages;
+- (void)insertPagesAtIndexes:(NSIndexSet *)indexes;
 
 - (BOOL)isDragging;
 
