@@ -43,7 +43,7 @@ static NSString * const kPageIdentifier = @"Page";
     self.pagingScrollView.interpageSpacing = 0;
     [self.view addSubview:self.pagingScrollView];
     
-    [self.pagingScrollView registerClass:[GMCPagingScrollViewReusableView class] forReuseIdentifier:kPageIdentifier];
+    [self.pagingScrollView registerClass:[UIView class] forReuseIdentifier:kPageIdentifier];
     
     [self.pagingScrollView reloadData];
 }
@@ -55,7 +55,7 @@ static NSString * const kPageIdentifier = @"Page";
 }
 
 - (UIView *)pagingScrollView:(GMCPagingScrollView *)pagingScrollView pageForIndex:(NSUInteger)index {
-    GMCPagingScrollViewReusableView *page = [pagingScrollView dequeueReusablePageWithIdentifier:kPageIdentifier];
+    UIView *page = [pagingScrollView dequeueReusablePageWithIdentifier:kPageIdentifier];
     
     switch (index) {
         case 0:
