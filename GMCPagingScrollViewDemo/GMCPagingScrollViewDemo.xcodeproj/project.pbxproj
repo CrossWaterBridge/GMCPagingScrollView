@@ -319,6 +319,7 @@
 				D97F78F61802D70800DF237C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

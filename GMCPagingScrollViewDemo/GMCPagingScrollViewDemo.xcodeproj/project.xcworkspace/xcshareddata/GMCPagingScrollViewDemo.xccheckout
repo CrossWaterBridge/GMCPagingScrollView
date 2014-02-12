@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F5D11807-CD80-4A88-AF6A-6ACED573219D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>GMCPagingScrollViewDemo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>6D5DFCA4-A214-42BC-93B4-AE586DE72785</key>
+		<string>https://github.com/GalacticMegacorp/GMCPagingScrollView.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>GMCPagingScrollViewDemo/GMCPagingScrollViewDemo.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>6D5DFCA4-A214-42BC-93B4-AE586DE72785</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/GalacticMegacorp/GMCPagingScrollView.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>6D5DFCA4-A214-42BC-93B4-AE586DE72785</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>6D5DFCA4-A214-42BC-93B4-AE586DE72785</string>
+			<key>IDESourceControlWCCName</key>
+			<string>GMCPagingScrollView</string>
+		</dict>
+	</array>
+</dict>
+</plist>
