@@ -97,29 +97,42 @@ static char pagingScrollViewPageIndexKey;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-		self.interpageSpacing = kDefaultInterpageSpacing;
-        self.clipsToBounds = YES;
-		
-		self.scrollView = [[GMCPagingInternalScrollView alloc] initWithFrame:[self frameForScrollView]];
-		self.scrollView.scrollsToTop = NO;
-		self.scrollView.pagingEnabled = YES;
-		self.scrollView.showsVerticalScrollIndicator = NO;
-		self.scrollView.showsHorizontalScrollIndicator = NO;
-		self.scrollView.delegate = self;
-        self.scrollView.clipsToBounds = NO;
-		[self addSubview:self.scrollView];
-        
-        __weak GMCPagingScrollView *weakSelf = self;
-        ((GMCPagingInternalScrollView *)self.scrollView).layoutSubviewsBlock = ^() {
-            [weakSelf performInfiniteScrollJumpIfNecessary];
-        };
-		
-		self.visiblePageSet = [[NSMutableSet alloc] init];
-        
-        self.classByReuseIdentifier = [NSMutableDictionary dictionary];
-		self.reusablePageSetByReuseIdentifier = [NSMutableDictionary dictionary];
+        [self initialize];
     }
     return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if ((self = [super initWithCoder:aDecoder])) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (void)initialize
+{
+    self.interpageSpacing = kDefaultInterpageSpacing;
+    self.clipsToBounds = YES;
+    
+    self.scrollView = [[GMCPagingInternalScrollView alloc] initWithFrame:[self frameForScrollView]];
+    self.scrollView.scrollsToTop = NO;
+    self.scrollView.pagingEnabled = YES;
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.delegate = self;
+    self.scrollView.clipsToBounds = NO;
+    [self addSubview:self.scrollView];
+    
+    __weak GMCPagingScrollView *weakSelf = self;
+    ((GMCPagingInternalScrollView *)self.scrollView).layoutSubviewsBlock = ^() {
+        [weakSelf performInfiniteScrollJumpIfNecessary];
+    };
+    
+    self.visiblePageSet = [[NSMutableSet alloc] init];
+    
+    self.classByReuseIdentifier = [NSMutableDictionary dictionary];
+    self.reusablePageSetByReuseIdentifier = [NSMutableDictionary dictionary];
 }
 
 - (void)setInterpageSpacing:(CGFloat)interpageSpacing {
