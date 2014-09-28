@@ -293,7 +293,7 @@ static char pagingScrollViewPageIndexKey;
     NSMutableSet *reusablePages = [NSMutableSet set];
     for (UIView *page in self.visiblePageSet) {
         if (numberOfPages == 0 || ![neededPageIndexes containsObject:@([self indexOfPage:page])]) {
-            if ([page respondsToSelector:@selector(reuseIdentifier)]) {
+            if ([page respondsToSelector:@selector(pagingScrollViewReuseIdentifier)]) {
                 NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:page.pagingScrollViewReuseIdentifier];
                 [reusablePageSet addObject:page];
             }
