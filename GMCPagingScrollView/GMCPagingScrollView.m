@@ -102,16 +102,14 @@ static char pagingScrollViewPageIndexKey;
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
+- (id)initWithCoder:(NSCoder *)aDecoder {
     if ((self = [super initWithCoder:aDecoder])) {
         [self initialize];
     }
     return self;
 }
 
-- (void)initialize
-{
+- (void)initialize {
     self.interpageSpacing = kDefaultInterpageSpacing;
     self.clipsToBounds = YES;
     
@@ -293,8 +291,9 @@ static char pagingScrollViewPageIndexKey;
     NSMutableSet *reusablePages = [NSMutableSet set];
     for (UIView *page in self.visiblePageSet) {
         if (numberOfPages == 0 || ![neededPageIndexes containsObject:@([self indexOfPage:page])]) {
-            if ([page respondsToSelector:@selector(pagingScrollViewReuseIdentifier)]) {
-                NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:page.pagingScrollViewReuseIdentifier];
+            NSString *reuseIdentifier = page.pagingScrollViewReuseIdentifier;
+            if (reuseIdentifier) {
+                NSMutableSet *reusablePageSet = [self reusablePageSetForReuseIdentifier:reuseIdentifier];
                 [reusablePageSet addObject:page];
             }
             

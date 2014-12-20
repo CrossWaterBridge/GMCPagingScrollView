@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "GMCPagingScrollView"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "Horizontally scrolling, paging UIScrollView that supports page preloading, page dequeuing, and infinite scrolling."
   s.author       = 'Hilton Campbell'
   s.homepage     = "https://github.com/GalacticMegacorp/GMCPagingScrollView"
