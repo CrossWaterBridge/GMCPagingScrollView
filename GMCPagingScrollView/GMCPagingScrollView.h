@@ -33,6 +33,7 @@
 @property (nonatomic, assign) BOOL infiniteScroll;
 @property (nonatomic, assign) NSUInteger currentPageIndex;
 @property (nonatomic, strong, readonly) UIScrollView *scrollView;
+@property (nonatomic) BOOL needsLayout;
 
 - (void)registerClass:(Class)class forReuseIdentifier:(NSString *)reuseIdentifier;
 

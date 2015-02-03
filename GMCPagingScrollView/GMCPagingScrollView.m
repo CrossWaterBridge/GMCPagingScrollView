@@ -155,7 +155,7 @@ static char pagingScrollViewPageIndexKey;
 	[super layoutSubviews];
 	
 	CGRect frameForScrollView = [self frameForScrollView];
-	if (!CGRectEqualToRect(self.scrollView.frame, frameForScrollView)) {
+	if (!CGRectEqualToRect(self.scrollView.frame, frameForScrollView) || self.needsLayout) {
         NSUInteger currentPageIndex = self.currentPageIndex;
         
         self.inLayoutSubviews = YES;
@@ -176,6 +176,7 @@ static char pagingScrollViewPageIndexKey;
 		}
         
         self.inLayoutSubviews = NO;
+        self.needsLayout = NO;
 	}
 }
 
