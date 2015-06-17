@@ -152,31 +152,31 @@ static char pagingScrollViewPageIndexKey;
 }
 
 - (void)layoutSubviews {
-	[super layoutSubviews];
-	
-	CGRect frameForScrollView = [self frameForScrollView];
-	if (!CGRectEqualToRect(self.scrollView.frame, frameForScrollView)) {
+    self.inLayoutSubviews = YES;
+    
+    [super layoutSubviews];
+    
+    CGRect frameForScrollView = [self frameForScrollView];
+    if (!CGRectEqualToRect(self.scrollView.frame, frameForScrollView)) {
         NSUInteger currentPageIndex = self.currentPageIndex;
-        
-        self.inLayoutSubviews = YES;
         
         NSUInteger numberOfPages = [self.dataSource numberOfPagesInPagingScrollView:self];
         NSUInteger numberOfActualPages = numberOfPages + [self numberOfInfiniteScrollPages];
         
-		self.scrollView.frame = frameForScrollView;
+        self.scrollView.frame = frameForScrollView;
         self.scrollView.contentSize = CGSizeMake(frameForScrollView.size.width * numberOfActualPages, frameForScrollView.size.height);
         self.scrollView.contentOffset = CGPointMake(frameForScrollView.size.width * currentPageIndex, 0);
-		
-		for (UIView *page in self.visiblePageSet) {
-			NSUInteger index = [self indexOfPage:page];
-			page.frame = [self frameForPageAtActualIndex:index];
+        
+        for (UIView *page in self.visiblePageSet) {
+            NSUInteger index = [self indexOfPage:page];
+            page.frame = [self frameForPageAtActualIndex:index];
             if ([self.delegate respondsToSelector:@selector(pagingScrollView:layoutPageAtIndex:)]) {
                 [self.delegate pagingScrollView:self layoutPageAtIndex:index];
             }
-		}
-        
-        self.inLayoutSubviews = NO;
-	}
+        }
+    }
+    
+    self.inLayoutSubviews = NO;
 }
 
 - (void)performInfiniteScrollJumpIfNecessary {
