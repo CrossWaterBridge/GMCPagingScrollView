@@ -20,6 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+@import UIKit;
+
+//! Project version number for GMCPagingScrollView.
+FOUNDATION_EXPORT double GMCPagingScrollViewVersionNumber;
+
+//! Project version string for GMCPagingScrollView.
+FOUNDATION_EXPORT const unsigned char GMCPagingScrollViewVersionString[];
+
 @protocol GMCPagingScrollViewDelegate;
 @protocol GMCPagingScrollViewDataSource;
 
