@@ -27,7 +27,7 @@ static const CGFloat kDefaultInterpageSpacing = 40;
 
 
 
-typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)();
+typedef void(^GMCPagingInternalScrollViewLayoutSubviewsBlock)(void);
 
 @interface GMCPagingInternalScrollView : UIScrollView
 
